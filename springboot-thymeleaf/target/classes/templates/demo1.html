@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+    引入themeleaf标签
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf模板引擎案例</title>
+</head>
+<script th:inline="javascript">
+    var hello = [[${hello}]]
+    function fun() {
+        alert(hello)
+    }
+</script>
+<body>
+    <!--
+    Thymeleaf标签使用：需要在指定的标签上使用Thymeleaf相关的语法
+    -->
+    <div th:text="${message}"></div>
+    hello boss!!
+
+    <div>
+        th:action指定表单提交的路径
+        <form id="login-form" th:action="@{/test/hello}">
+            <button>提交</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <td>下标</td>
+            <td>编号</td>
+            <td>姓名</td>
+            <td>住址</td>
+        </tr>
+        <tr th:each="user,userStat:${users}">
+            <!-- 第二个变量表示当前被循环数据的状态记录-->
+            <td>
+                <span th:text="${userStat.index}"></span>,
+            </td>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.address}"></td>
+        </tr>
+    </table>
+    方式一：（知道key)
+    <div>
+        获取key=No的值：<span th:text="${dataMap.No}"></span><br/>
+        获取key=address的值：<span th:text="${dataMap.address}"></span>
+    </div>
+    方式二：（不知道key）
+    <div th:each="map,mapStat:${dataMap}">
+        <div th:text="${map}"></div>
+        key:<span th:text="${mapStat.current.key}"></span><br/>
+        value:<span th:text="${mapStat.current.value}"></span><br/>
+        ==============================================
+    </div>
+
+    <div th:each="nm,nmStat:${names}">
+        <span th:text="${nmStat.count}"></span><span th:text="${nm}"></span>
+        ==============================================
+    </div>
+    日期输出：
+    <div>
+        <span th:text="${#dates.format(now,'yyyy-MM-dd hh:ss:mm')}"></span>
+    </div>
+    条件判断：th:if th:less条件不成立时输出数据
+    <div>
+        <span th:if="${(age>=18)}">终于长大了！</span><br/>
+        <span th:unless="${(age<18)}">成年人</span>
+    </div>
+    <div>
+    《《模块引入》》
+        <div id="A" th:include="footer::copy">
+        </div>
+    </div>
+
+    <button onclick="fun()">点击弹框</button>
+    <a th:class="|${class1} ${class2}|">abababa</a>
+    <!-- || 拼接效果没看出来 -->
+</body>
+</html>
